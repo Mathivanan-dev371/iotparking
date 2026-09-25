@@ -1,0 +1,279 @@
+:root {
+  --bg-dark: #0f172a;
+  --bg-panel: rgba(30, 41, 59, 0.7);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  
+  --color-available: #10b981;
+  --color-available-glow: rgba(16, 185, 129, 0.4);
+  --color-occupied: #ef4444;
+  --color-occupied-glow: rgba(239, 68, 68, 0.4);
+  
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.05), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(239, 68, 68, 0.05), transparent 25%);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glassmorphism Panel Utilities */
+.glass-panel {
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  width: 100%;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 2rem;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header-title h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  background: linear-gradient(to right, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.status-dot.online { background-color: var(--color-available); box-shadow: 0 0 8px var(--color-available-glow); }
+.status-dot.error { background-color: var(--color-occupied); box-shadow: 0 0 8px var(--color-occupied-glow); }
+.status-dot.connecting { background-color: #f59e0b; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
+
+.last-updated {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+/* Stats Summary */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.stat-card {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-title {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.stat-value.total { color: #3b82f6; }
+.stat-value.available { color: var(--color-available); }
+.stat-value.occupied { color: var(--color-occupied); }
+
+/* Parking Lot Layout */
+.parking-lot {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 24px;
+  border: 2px dashed rgba(255,255,255,0.05);
+}
+
+@media (min-width: 768px) {
+  .parking-lot {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Parking Slot */
+.parking-slot {
+  position: relative;
+  aspect-ratio: 3/4;
+  border: 3px solid;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  background: rgba(255,255,255,0.02);
+}
+
+.parking-slot::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.parking-slot.available {
+  border-color: var(--color-available);
+  box-shadow: inset 0 0 20px var(--color-available-glow),
+              0 0 15px var(--color-available-glow);
+}
+
+.parking-slot.occupied {
+  border-color: var(--color-occupied);
+  box-shadow: inset 0 0 20px var(--color-occupied-glow),
+              0 0 15px var(--color-occupied-glow);
+}
+
+.slot-number {
+  position: absolute;
+  top: 1rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  opacity: 0.5;
+  transition: opacity 0.3s;
+}
+
+.parking-slot.available .slot-number {
+  color: var(--color-available);
+}
+.parking-slot.occupied .slot-number {
+  color: var(--color-occupied);
+}
+
+.slot-status {
+  position: absolute;
+  bottom: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.parking-slot.available .slot-status { color: var(--color-available); }
+.parking-slot.occupied .slot-status { color: var(--color-occupied); }
+
+/* Car Animation */
+.car-container {
+  width: 60%;
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  opacity: 0;
+  z-index: 5;
+}
+
+.car-container.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.car-container.hidden {
+  opacity: 0;
+  transform: translate(-50%, 100%) scale(0.8);
+}
+
+.car-svg {
+  width: 100%;
+  height: 100%;
+  fill: #f8fafc;
+  filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+}
+
+/* Legend */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  padding: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+.legend-color.available { background: var(--color-available); box-shadow: 0 0 8px var(--color-available-glow); }
+.legend-color.occupied { background: var(--color-occupied); box-shadow: 0 0 8px var(--color-occupied-glow); }
